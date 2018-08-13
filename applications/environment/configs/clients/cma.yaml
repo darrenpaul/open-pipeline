@@ -1,0 +1,51 @@
+name: "cma"
+fps: 25
+client:
+  abc:
+    context:
+      asset:
+        department:
+          - "concept"
+          - "modeling"
+          - "rigging"
+          - "texturing"
+        task:
+          - "c0000_cat"
+          - "c0001_cat"
+          - "c0002_cat"
+          - "c0003_cat"
+      shot:
+        department:
+          - "animation"
+          - "lighting"
+          - "vfx"
+          - "compositing"
+        task:
+          - "0000s0000"
+          - "0000s0001"
+          - "0000s0002"
+          - "0000s0003"
+  def:
+    context:
+      asset:
+        department:
+          - "concept"
+          - "modeling"
+          - "rigging"
+          - "texturing"
+        task:
+          - "c0000_cat"
+          - "c0001_cat"
+          - "c0002_cat"
+          - "c0003_cat"
+      shot:
+        department:
+          - "animation"
+          - "lighting"
+          - "vfx"
+          - "compositing"
+        task:
+          - "0000s0000"
+          - "0000s0001"
+          - "0000s0002"
+          - "0000s0003"

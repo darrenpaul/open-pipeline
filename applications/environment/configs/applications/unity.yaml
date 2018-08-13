@@ -1,0 +1,6 @@
+location:
+  linux:    ""
+  windows:  "{drive}/Program Files/Unity/Editor"
+
+product:
+  unity:    "Unity"

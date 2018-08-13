@@ -1,0 +1,10 @@
+windows:
+  root: "c:"
+  drive: "c:"
+  _launch: "start /b powershell Start-Process -FilePath"
+linux:
+  root: "/root"
+  drive: "/opt"
+  _launch: "gnome-terminal -e"
+darwin:
+  root: "/Volumes"

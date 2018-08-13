@@ -1,0 +1,10 @@
+location:
+  linux:    ""
+  windows:  "{drive}/Program Files/Adobe/Adobe Photoshop CC *"
+product:
+  photoshop:  "Photoshop"
+
+environment:
+  windows: ""
+  universal:
+    - ""

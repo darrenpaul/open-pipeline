@@ -1,0 +1,82 @@
+location:
+  linux:    "/opt/hfs{version}/bin"
+  windows:  "{drive}/Program Files/Side Effects Software/Houdini */bin"
+product:
+  escape:  "hescape"
+  master:  "hmaster"
+flags:
+  linux:
+    - "-n"
+    - "-foreground"
+  windows:
+    - "{_pre_scene}"
+
+environment:
+  universal:
+    _pre_scene:
+      - "{_pre_scene}"
+    fps:
+      - "{fps}"
+    framerange:
+      - "{framerange}"
+    HOUDINI_PATH:
+      - "$HOUDINI_PATH"
+      - "//YARN/projects/houdini_distros/htoa/htoa-3.0.3_ra077233_houdini-${HOUDINI_VERSION}/htoa-3.0.3_ra077233_houdini-${HOUDINI_VERSION}"
+      - "C:/Users/render_01/AppData/Local/Thinkbox/Deadline10/submitters/HoudiniSubmitter"
+      - "{_script_source}/engines/poly_houdini"
+      - "{_script_source}/engines/poly_houdini/startup"
+      - "&"
+      - "@"
+    HOUDINI_SCRIPT_PATH:
+      - "$HFS/houdini/scripts"
+      - "$HOUDINI_SCRIPT_PATH"
+      - "@"
+      - "&"
+    HOUDINI_OTLSCAN_PATH:
+      - "/otls"
+      - "//YARN/projects/houdini/otls"
+      - '$QOTL/base'
+      - '$QOTL/future'
+      - '$QOTL/experimental'
+      - "@"
+      - "&"
+    HOUDINI_TOOLBAR_PATH:
+      - "$HFS/houdini/toolbar"
+      - "{_script_source}/engines/poly_houdini/shelves"
+      - "@"
+      - "&"
+    PYTHONPATH:
+      - "{_script_source}/engines"
+      - "{_script_source}/tools/app"
+    HOUDINI_DISABLE_CONSOLE:
+      - "0"
+    HOUDINI_WINDOW_CONSOLE:
+      - "0"
+    HOUDINI_NO_START_PAGE_SPLASH:
+      - "0"
+    HOUDINI_USE_HFS_PYTHON:
+      - "0"
+    HOUDINI_NOHKEY:
+      - "0"
+    HOUDINI_NOHKEY_APPRENTICE:
+      - "0"
+    solidangle_LICENSE:
+      - "27000@licserver03"
+    PATH:
+      - "$PATH"
+      - "//YARN/projects/houdini_distros/htoa/htoa-3.0.3_ra077233_houdini-${HOUDINI_VERSION}/htoa-3.0.3_ra077233_houdini-${HOUDINI_VERSION}/scripts/bin"
+    HOME:
+      - "//YARN/projects"
+    JOB:
+      - "//YARN/projects"
+    HOUDINI_MENU_PATH:
+      - "C:/Users/render_01/AppData/Local/Thinkbox/Deadline10/submitters/HoudiniSubmitter"
+      - "&"
+    HOUDINI_IMAGE_DISPLAY_GAMMA:
+      - "1"
+    HOUDINI_IMAGE_DISPLAY_LUT:
+      - "{plugins}/ocio/aces_1.0.3/baked/houdini/Rec.709 for ACEScg Houdini.lut"
+    HOUDINI_IMAGE_DISPLAY_OVERRIDE:
+      - ""
+    HOUDINI_SPLASH_FILE:
+      - "{data}/images/houdini/splash.png"

@@ -1,0 +1,31 @@
+location:
+  linux:    "/usr/autodesk/maya{version}/bin"
+  windows:  "{drive}/Program Files/Autodesk/Maya*/bin"
+product:
+  maya:  "maya"
+
+environment:
+  windows:
+    XBMLANGPATH:
+      - "{_script_source}/tools/app/maya/icons"
+  linux:
+    XBMLANGPATH:
+      - "{_script_source}/tools/app/maya/icons/%B"
+    MAYA_MODULE_PATH:
+      - "/opt/solidangle/mtoa/2017"
+    MAYA_RENDER_DESC_PATH:
+      - "/opt/solidangle/mtoa/2017"
+  universal:
+    PYTHONPATH:
+      - "{_script_source}/engines"
+      - "{_script_source}/engines/poly_maya/startup"
+    MAYA_SCRIPT_PATH:
+      - "{_script_source}/engines/poly_maya"
+    MAYA_SHELF_PATH:
+      - "{_script_source}/engines/poly_maya/shelves"
+    fps:
+      - "{fps}"
+    framerange:
+      - "{framerange}"
+    _pre_scene:
+      - "{_pre_scene}"
