@@ -26,7 +26,7 @@ class GuiEnvironment(QMainWindow):
         self.__style_interface()
         self.windowPostion = self.pos()
 
-        widgets = application_widget.ApplicationButton(applications=["maya", "houdini"])
+        widgets = application_widget.ApplicationButton(applications=["maya", "houdini", "nuke"])
         self.setCentralWidget(widgets)
 
     def __build_ui(self):

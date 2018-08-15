@@ -3,4 +3,4 @@
 - task_path: "{context_path}/{task}"
 - department_path: "{task_path}/{department}"
 - working_app: "{department_path}/{appname}"
-- working_user: "{department_path}/{appname}/{user}"
+- working_directory: "{department_path}/{appname}/{user}"
