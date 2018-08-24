@@ -24,12 +24,7 @@ class Application:
             self.executable = os.path.join(_directory, _executable).replace(os.sep, "/")
             self.config_data["location"][self.environment.platform] = _directory
             self.versions = app_tools.get_all_application_versions(application_path=os.path.join(_directory, _executable))
-            # Checks if environment object has application object
-            if hasattr(self.environment, base) is False:
-                if "flags" in self.config_data:
-                    if self.environment.platform in self.config_data["flags"]:
-                        self.flags = self.config_data["flags"][self.environment.platform]
-                setattr(self.environment, base, self)
+            self._set_flags(base_name=base)
 
             self.products.update({base: product})
 
@@ -41,9 +36,9 @@ class Application:
         self.__check_version(version=version)
 
         self.environment.core_variables.update({"appname": self.appname, "appversion": self.version})
-        # self.environment.build_project()
 
         self.__run_app_startup()
+        
         if "working_directory" in self.environment.core_variables:
             os.chdir(self.environment.core_variables["working_directory"])
 
@@ -54,6 +49,13 @@ class Application:
 
         pprint(self.environment.core_variables)
 
+    def _set_flags(self, base_name):
+        if hasattr(self.environment, base_name) is False:
+            if "flags" in self.config_data:
+                if self.environment.platform in self.config_data["flags"]:
+                    self.flags = self.config_data["flags"][self.environment.platform]
+            setattr(self.environment, base_name, self)
+            
     def __run_app_startup(self):
         app_start_up.setup_application(self.environment)
 

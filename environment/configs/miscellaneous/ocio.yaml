@@ -1,8 +1,4 @@
-OCIO: "{plugins}/ocio/aces_1.0.3/config.ocio"
-#This variable needs to point to the global OCIO config file, e.g config.ocio
-OCIO_LOGGING_LEVEL: "None"
-#Valid values are none, warning, info, or debug (or their respective numeric values 0, 1, 2, or 3 can be used)
+- OCIO: "{plugins}/ocio/aces_1.0.3/config.ocio"
+- OCIO_LOGGING_LEVEL: "None"
+- OCIO_ACTIVE_VIEWS: "Rec.709"
 # OCIO_ACTIVE_DISPLAYS: "Rec.709"
-#Overrides the active_displays configuration value. Colon-separated list of displays, e.g sRGB:P3
-OCIO_ACTIVE_VIEWS: "Rec.709"
-#Overrides the active_views configuration item. Colon-separated list of view names, e.g internal:client:DI

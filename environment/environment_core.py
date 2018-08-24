@@ -13,7 +13,7 @@ from modules.application import application_object
 class Environment:
     def __init__(self, set_envs=True, **kwargs):
         self.setEnvs = set_envs
-        self.core_variables = kwargs
+        self.core_variables = copy.deepcopy(kwargs)
         self.apps = []
         self.configs = {}
         self.applications = []
@@ -28,9 +28,8 @@ class Environment:
         self.__consume_core_config()
         self.__consume_system_config()
         self.__consume_application_config()
-        # self._consume_paths_config()
-        # self._consume_context_config()
-        # self._consume_miscellaneous()
+        self.__consume_paths_config()
+        self.__consume_miscellaneous_config()
         # if self.setEnvs:
         #     os.environ.update(self.core_variables)
 
@@ -74,12 +73,46 @@ class Environment:
             self.core_variables.update(_config[self.platform])
 
     def __consume_application_config(self):
-        if "application" in self.configs:
-            _config = op_yaml.read_yaml(path=self.configs["application"])
-            for k, v in _config.iteritems():
+        self.__consume_config(config_name="application")
+        _applicationConfig = self.configs.get("application")
+        if _applicationConfig:
+            for k, v in op_yaml.read_yaml(path=self.configs["application"]).items():
                 _configPath = op_string.resolve_string(data=self.core_variables, string=v)
                 self.configs.update({k: _configPath})
                 self.__initialise_application(config_path=_configPath)
+
+    def __consume_paths_config(self):
+        config_name = "paths"
+        if config_name in self.configs:
+            _config = op_yaml.read_yaml(path=self.configs[config_name])
+            for k, v in _config.iteritems():
+                _configPath = op_string.resolve_string(data=self.core_variables, string=v)
+                self.configs.update({k: _configPath})
+                self.__consume_template_config(key_name=k)
+
+    def __consume_miscellaneous_config(self):
+        config_name = "miscellaneous"
+        if config_name in self.configs:
+            _config = op_yaml.read_yaml(path=self.configs[config_name])
+            for k, v in _config.iteritems():
+                _configPath = op_string.resolve_string(data=self.core_variables, string=v)
+                self.configs.update({k: _configPath})
+                self.__consume_template_config(key_name=k)
+
+    def __consume_template_config(self, key_name):
+        if key_name in self.configs:
+            _configPath = self.configs.get(key_name)
+            for item in op_yaml.read_yaml(path=_configPath):
+                for k, v in item.items():
+                    _configPath = op_string.resolve_string(data=self.core_variables, string=v)
+                    self.core_variables.update({k: _configPath})
+
+    def __consume_config(self, config_name):
+        if config_name in self.configs:
+            _config = op_yaml.read_yaml(path=self.configs[config_name])
+            for k, v in _config.iteritems():
+                _configPath = op_string.resolve_string(data=self.core_variables, string=v)
+                self.configs.update({k: _configPath})
 
     def __initialise_application(self, config_path):
         _data = op_yaml.read_yaml(path=config_path)
@@ -106,7 +139,6 @@ class Environment:
 
         #             if appname not in self.apps:
         #                 self.apps.append(appname)
-
 
     def __initialise_application_old(self, appname, config):
         _config = utils.read_yaml(path=config)
@@ -141,8 +173,10 @@ class Environment:
 
 
 
-envObj = Environment()
-envObj.maya.launch(product="maya", version="2016")
+envObj = Environment(**{"client": "apples"})
+pprint(envObj.core_variables)
+pprint(envObj.configs)
+# envObj.maya.launch(product="maya", version="2016")
 # print "++++++++++++++++++++++++"
 # pprint(envObj.__dict__)
 # pprint(envObj.maya.__dict__)

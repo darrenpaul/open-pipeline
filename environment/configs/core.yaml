@@ -2,7 +2,7 @@ configs:
   system: "{_config_source}/system.yaml"
   application: "{_config_source}/application.yaml"
   paths: "{_config_source}/paths.yaml"
-  miscellaneous: "{_config_source}/miscellaneous"
+  miscellaneous: "{_config_source}/miscellaneous.yaml"
 sources:
   plugins: "{_script_source}/plugins"
   data: "{_script_source}/data"
