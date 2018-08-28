@@ -1,0 +1,14 @@
+{
+  "name": "launcher",
+  "version": "1.0.0",
+  "description": "Used for launching the environment",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Darren Paul",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^2.0.8"
+  }
+}

@@ -173,9 +173,9 @@ class Environment:
 
 
 
-envObj = Environment(**{"client": "apples"})
-pprint(envObj.core_variables)
-pprint(envObj.configs)
+# envObj = Environment(**{"client": "apples"})
+# pprint(envObj.core_variables)
+# pprint(envObj.configs)
 # envObj.maya.launch(product="maya", version="2016")
 # print "++++++++++++++++++++++++"
 # pprint(envObj.__dict__)
