@@ -1,8 +1,10 @@
 location:
   linux:    "/usr/autodesk/maya{version}/bin"
   windows:  "{drive}/Program Files/Autodesk/Maya*/bin"
-product:
-  maya:  "maya"
+
+product: "maya"
+
+icon: "{_script_source}/source/icons/maya.png"
 
 environment:
   windows:

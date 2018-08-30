@@ -1,7 +1,10 @@
 import os
 import sys
+import ast
+import json
 import glob
 import copy
+import tempfile
 from pprint import pprint
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__).replace(os.sep, "/"))
@@ -21,7 +24,6 @@ class Environment:
         # self.__check_if_app_available()
 
     def update_environment_data(self):
-
         self.__get_platform()
         self.__get_user()
         self.__get_host()
@@ -30,6 +32,7 @@ class Environment:
         self.__consume_application_config()
         self.__consume_paths_config()
         self.__consume_miscellaneous_config()
+        self.__update_application_configs()
         # if self.setEnvs:
         #     os.environ.update(self.core_variables)
 
@@ -171,9 +174,70 @@ class Environment:
                     if appname not in self.apps:
                         self.apps.append(appname)
 
+    def __update_application_configs(self):
+        _tempDirectory = os.path.join(tempfile.gettempdir(), "open_pipeline", "applications")
+        if os.path.exists(_tempDirectory) is False:
+            _tempDirectory = os.path.join(tempfile.gettempdir())
+            for i in ["open_pipeline", "applications"]:
+                _tempDirectory = os.path.join(_tempDirectory, i)
+                if os.path.exists(_tempDirectory) is False:
+                    os.mkdir(_tempDirectory)
+
+        for app in self.apps:
+            _dataPath = os.path.join(_tempDirectory, app + ".json")
+            print getattr(self, app).icon
+            _data = {
+                "name": app,
+                "icon": getattr(self, app).icon,
+                "versions": getattr(self, app).versions
+            }
+
+            with open(_dataPath, 'w') as _file:
+                json.dump(_data, _file)
 
 
-# envObj = Environment(**{"client": "apples"})
+def __get_data_from_argv():
+    _data = {}
+    for i in sys.argv[1:]:
+        _data.update(json.loads(i))
+    return _data
+
+
+def __prepare_data(data):
+    envObj = Environment()
+    pprint(envObj.core_variables)
+    print data.get("product")
+    print data.get("version")
+    if data.get("product") and data.get("version"):
+        envObj.maya.launch(product=data.get("product"), version=data.get("version"))
+
+
+if __name__ == "__main__":
+    _data = __get_data_from_argv()
+    __prepare_data(data=_data)
+
+
+
+
+
+
+
+
+
+
+
+
+# print "!"*100
+# for i in sys.argv[1:]:
+#     print i
+#     pprint(json.loads(i))
+#     print type(ast.literal_eval(i))
+# print "!"*100
+
+
+
+# pprint(json.loads(sys.argv[3]))
+# envObj = Environment()
 # pprint(envObj.core_variables)
 # pprint(envObj.configs)
 # envObj.maya.launch(product="maya", version="2016")

@@ -17,20 +17,28 @@ class Application:
         self.update_application()
 
     def update_application(self):
-        for base, product in self.config_data["product"].items():
-            _executable = app_tools.set_executable(platform=self.environment.platform, application_name=product)
-            _directory = op_string.resolve_string(data=self.environment.core_variables, string=self.config_data["location"][self.environment.platform])
+        if "products" in self.config_data:
+            self.__add_multiple_application_products(self.config_data["products"])
+        elif "product" in self.config_data:
+            self.__add_single_application_product(self.config_data["product"])
 
-            self.executable = os.path.join(_directory, _executable).replace(os.sep, "/")
-            self.config_data["location"][self.environment.platform] = _directory
-            self.versions = app_tools.get_all_application_versions(application_path=os.path.join(_directory, _executable))
-            self._set_flags(base_name=base)
+    def __add_single_application_product(self, product_name):
+        print product_name
+        _executable = app_tools.set_executable(platform=self.environment.platform, application_name=product_name)
+        _directory = op_string.resolve_string(data=self.environment.core_variables, string=self.config_data["location"][self.environment.platform])
 
-            self.products.update({base: product})
+        self.icon = op_string.resolve_string(data=self.environment.core_variables, string=self.config_data.get("icon"))
+        self.executable = os.path.join(_directory, _executable).replace(os.sep, "/")
+        self.config_data["location"][self.environment.platform] = _directory
+        self.versions = app_tools.get_all_application_versions(application_path=os.path.join(_directory, _executable))
+        self._set_flags(base_name=product_name)
 
-            if base not in self.environment.apps:
-                self.environment.apps.append(base)
-            self.appname = base
+        if product_name not in self.environment.apps:
+            self.environment.apps.append(product_name)
+
+    def __add_multiple_application_products(self, products):
+        for product in products:
+            self.__add_single_application_product(product)
 
     def launch(self, product, version=""):
         self.__check_version(version=version)
@@ -40,11 +48,11 @@ class Application:
         self.__run_app_startup()
         
         if "working_directory" in self.environment.core_variables:
-            os.chdir(self.environment.core_variables["working_directory"])
+            if os.path.exists(self.environment.core_variables.get("working_directory")):
+                os.chdir(self.environment.core_variables["working_directory"])
 
         print "Launching {app}".format(app=self.appname)
         self.__create_launch_command(product=product)
-        print self.__create_launch_command(product=product)
         os.system(self.__create_launch_command(product=product))
 
         pprint(self.environment.core_variables)

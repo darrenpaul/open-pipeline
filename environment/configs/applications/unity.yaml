@@ -2,5 +2,6 @@ location:
   linux:    ""
   windows:  "{drive}/Program Files/Unity/Editor"
 
-product:
-  unity:    "Unity"
+product: "unity"
+
+icon: "{_script_source}/source/icons/unity.png"

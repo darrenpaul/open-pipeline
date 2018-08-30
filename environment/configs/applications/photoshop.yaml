@@ -1,8 +1,10 @@
 location:
   linux:    ""
   windows:  "{drive}/Program Files/Adobe/Adobe Photoshop CC *"
-product:
-  photoshop:  "Photoshop"
+
+product: "photoshop"
+
+icon: "{_script_source}/source/icons/photoshop.png"
 
 environment:
   windows: ""

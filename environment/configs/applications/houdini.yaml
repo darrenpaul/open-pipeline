@@ -1,9 +1,13 @@
 location:
   linux:    "/opt/hfs{version}/bin"
   windows:  "{drive}/Program Files/Side Effects Software/Houdini */bin"
-product:
-  houdini:  "hescape"
-  houdini:  "hmaster"
+
+products:
+  - "hescape"
+  - "hmaster"
+
+icon: "{_script_source}/source/icons/houdini.png"
+
 flags:
   linux:
     - "-n"

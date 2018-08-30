@@ -1,0 +1,22 @@
+.application-image{
+    height: 100px;
+    width: 100px;
+}
+
+.application-version-dropdown{
+    background-color: rgb(128, 128, 128);
+    text-align: center;
+}
+.application-version{
+    font-weight: 700;
+    color: rgba(255, 255, 255, 255);
+    background-color: transparent;
+}
+
+.application-space{
+    padding-bottom: 50px;
+}
+
+.dropdown-menu{
+    min-width: 85px !important;
+}
