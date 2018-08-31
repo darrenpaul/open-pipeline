@@ -1,10 +1,12 @@
+product: "houdini"
+
 location:
   linux:    "/opt/hfs{version}/bin"
   windows:  "{drive}/Program Files/Side Effects Software/Houdini */bin"
 
-products:
-  - "hescape"
-  - "hmaster"
+sub_products:
+  escape: "hescape"
+  master: "hmaster"
 
 icon: "{_script_source}/source/icons/houdini.png"
 

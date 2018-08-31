@@ -12,6 +12,7 @@ sys.path.append(ROOT_DIR)
 from modules.read_write import op_yaml
 from modules.manipulation import op_string
 from modules.application import application_object
+from modules.application import tools as app_tools
 
 class Environment:
     def __init__(self, set_envs=True, **kwargs):
@@ -35,6 +36,26 @@ class Environment:
         self.__update_application_configs()
         # if self.setEnvs:
         #     os.environ.update(self.core_variables)
+
+    def launch_application(self, product, version, sub_product=None):
+        if product is None or product not in self.apps:
+            sub_product = product
+            product = self.__get_product_from_sub_product(sub_product=sub_product)
+
+        if hasattr(self, product):
+            _appObject = getattr(self, product)
+            if hasattr(_appObject, "subProducts") and getattr(_appObject, "subProducts"):
+                if sub_product in getattr(_appObject, "subProducts"):
+                    _subProduct = getattr(_appObject, "subProducts").get(sub_product)
+                    _executable = app_tools.set_executable(platform=self.platform, application_name=_subProduct)
+                    _exePath = os.path.join(_appObject.executable, _executable).replace(os.sep, "/")
+                    _appObject.executable = _exePath
+            else:
+                _executable = app_tools.set_executable(platform=self.platform, application_name=product)
+                _exePath = os.path.join(_appObject.executable, _executable).replace(os.sep, "/")
+                _appObject.executable = _exePath
+
+            _appObject.launch()
 
     def __get_platform(self):
         try:
@@ -174,6 +195,14 @@ class Environment:
                     if appname not in self.apps:
                         self.apps.append(appname)
 
+    def __get_product_from_sub_product(self, sub_product):
+        for app in self.apps:
+            if hasattr(self, app):
+                _appObject = getattr(self, app)
+                if hasattr(_appObject, "subProducts"):
+                    if sub_product in getattr(_appObject, "subProducts"):
+                        return _appObject.productName
+
     def __update_application_configs(self):
         _tempDirectory = os.path.join(tempfile.gettempdir(), "open_pipeline", "applications")
         if os.path.exists(_tempDirectory) is False:
@@ -184,16 +213,24 @@ class Environment:
                     os.mkdir(_tempDirectory)
 
         for app in self.apps:
-            _dataPath = os.path.join(_tempDirectory, app + ".json")
-            print getattr(self, app).icon
-            _data = {
-                "name": app,
-                "icon": getattr(self, app).icon,
-                "versions": getattr(self, app).versions
-            }
+            if hasattr(self, app):
+                _appObject = getattr(self, app)
+                _data = {
+                    "icon": getattr(self, app).icon,
+                    "versions": getattr(self, app).versions
+                }
+                if hasattr(_appObject, "subProducts"):
+                    for sub in getattr(_appObject, "subProducts"):
+                        self.__create_application_config(path=_tempDirectory, app=sub, data=_data)
+                else:
+                    self.__create_application_config(path=_tempDirectory, app=app, data=_data)
 
-            with open(_dataPath, 'w') as _file:
-                json.dump(_data, _file)
+    def __create_application_config(self, path, app, data):
+        _dataPath = os.path.join(path, app + ".json")
+        data.update({"name": app})
+
+        with open(_dataPath, 'w') as _file:
+            json.dump(data, _file)
 
 
 def __get_data_from_argv():
@@ -205,18 +242,18 @@ def __get_data_from_argv():
 
 def __prepare_data(data):
     envObj = Environment()
-    pprint(envObj.core_variables)
-    print data.get("product")
-    print data.get("version")
     if data.get("product") and data.get("version"):
-        envObj.maya.launch(product=data.get("product"), version=data.get("version"))
+        _subProduct = data.get("sub_product")
+        envObj.launch_application(product=data.get("product"), version=data.get("version"), sub_product=_subProduct)
 
 
 if __name__ == "__main__":
     _data = __get_data_from_argv()
     __prepare_data(data=_data)
 
-
+# envObj = Environment()
+# envObj.launch_application(product="escape", version="16.5.439", sub_product="escape")
+# envObj.launch_application(product="maya", version="2016")
 
 
 
@@ -237,7 +274,6 @@ if __name__ == "__main__":
 
 
 # pprint(json.loads(sys.argv[3]))
-# envObj = Environment()
 # pprint(envObj.core_variables)
 # pprint(envObj.configs)
 # envObj.maya.launch(product="maya", version="2016")

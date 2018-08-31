@@ -10,40 +10,37 @@ class Application:
     def __init__(self, environment, config_data):
         self.environment = environment
         self.config_data = config_data
-        self.appname = ""
+        self.productName = ""
         self.executable = ""
-        self.products = {}
         self.versions = []
         self.update_application()
 
     def update_application(self):
-        if "products" in self.config_data:
-            self.__add_multiple_application_products(self.config_data["products"])
-        elif "product" in self.config_data:
-            self.__add_single_application_product(self.config_data["product"])
+        if "product" in self.config_data:
+            self.__add_single_application_product(product=self.config_data["product"])
+        if "sub_products" in self.config_data:
+            self.__add_single_application_product(product=self.config_data["product"], sub_products=self.config_data["sub_products"])
 
-    def __add_single_application_product(self, product_name):
-        print product_name
-        _executable = app_tools.set_executable(platform=self.environment.platform, application_name=product_name)
+    def __add_single_application_product(self, product, sub_products=None):
+        _executable = app_tools.set_executable(platform=self.environment.platform, application_name=product)
         _directory = op_string.resolve_string(data=self.environment.core_variables, string=self.config_data["location"][self.environment.platform])
 
+        self.productName = product
+        if sub_products:
+            self.subProducts = sub_products
         self.icon = op_string.resolve_string(data=self.environment.core_variables, string=self.config_data.get("icon"))
-        self.executable = os.path.join(_directory, _executable).replace(os.sep, "/")
+        self.executable = _directory.replace(os.sep, "/")
         self.config_data["location"][self.environment.platform] = _directory
         self.versions = app_tools.get_all_application_versions(application_path=os.path.join(_directory, _executable))
-        self._set_flags(base_name=product_name)
+        self._set_flags(base_name=product)
 
-        if product_name not in self.environment.apps:
-            self.environment.apps.append(product_name)
+        if product not in self.environment.apps:
+            self.environment.apps.append(product)
 
-    def __add_multiple_application_products(self, products):
-        for product in products:
-            self.__add_single_application_product(product)
-
-    def launch(self, product, version=""):
+    def launch(self, sub_product=None, version=""):
         self.__check_version(version=version)
 
-        self.environment.core_variables.update({"appname": self.appname, "appversion": self.version})
+        self.environment.core_variables.update({"appname": self.productName, "appversion": self.version})
 
         self.__run_app_startup()
         
@@ -51,9 +48,9 @@ class Application:
             if os.path.exists(self.environment.core_variables.get("working_directory")):
                 os.chdir(self.environment.core_variables["working_directory"])
 
-        print "Launching {app}".format(app=self.appname)
-        self.__create_launch_command(product=product)
-        os.system(self.__create_launch_command(product=product))
+        print "Launching {app}".format(app=self.productName)
+        print self.__create_launch_command(product=sub_product)
+        os.system(self.__create_launch_command(product=sub_product))
 
         pprint(self.environment.core_variables)
 
@@ -76,7 +73,7 @@ class Application:
         _resolved = []
         if hasattr(self, "flags"):
             for f in self.flags:
-                _resolved.append(utils.resolve_string(data=self.environment.core_variables, string=f))
+                _resolved.append(op_string.resolve_string(data=self.environment.core_variables, string=f))
             if len(_resolved) > 0:
                 return " ".join(_resolved)
             return " ".join(self.flags)
