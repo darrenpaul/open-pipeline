@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="styles/navbar.css"/>
     <link rel="stylesheet" type="text/css" href="styles/tab_content.css"/>
     <link rel="stylesheet" type="text/css" href="styles/application_content.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/environment_content.css"/>
 
     <!-- Custom scripts -->
     <script type="text/javascript" src="scripts/application_manager.js"></script>
@@ -35,6 +36,7 @@
             <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
             <a class="nav-link" data-toggle="tab" href="#applications">Applications</a>
             <a class="nav-link" data-toggle="tab" href="#environment">Environment</a>
+            <a class="nav-link" data-toggle="tab" href="#settings">Settings</a>
           </nav>
         </div>
       </header>
@@ -54,14 +56,62 @@
             -->
           </div>
         </div>
+
+        <!-- ENVIRONMENT CONTENT -->
         <div id="environment" class="tab-pane fade">
-            <h3>Environment Settings</h3>
-            <p>The environment settings</p>
+          <div class="container-fluid environment-container">
+            <form>
+              <!-- <div class="form-group">
+                <label for="client">Client</label>
+                <select id="client" class="form-control">
+                  <option>Sunrise</option>
+                  <option>Polycat</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="project">Project</label>
+                <select id="project" class="form-control">
+                  <option>Special Star</option>
+                  <option>Short</option>
+                </select>
+              </div> -->
+              
+              <!-- FPS -->
+              <div class="form-group">
+                <label for="fps">Frames per second</label>
+                <input type="text" class="form-control" id="fps" aria-describedby="fpsHelp" placeholder="25">
+                <small id="fpsHelp" class="form-text text-muted">Set the frames per second here E.G. 25</small>
+              </div>
+              <!-- FPS END-->
+
+              <!-- FRAME RANGE -->
+              <div class="form-row">
+                  <div class="col">
+                    <label>Start Frame</label>
+                    <input type="text" class="form-control" placeholder="Start Frame">
+                  </div>
+                  <div class="col">
+                    <label>Last Frame</label>
+                    <input type="text" class="form-control" placeholder="Last Frame">
+                  </div>
+              </div>
+              <!-- FRAME RANGE END -->
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+        <!-- ENVIRONMENT CONTENT END -->
+
+        <div id="settings" class="tab-pane fade">
+          <h3>Settings</h3>
+          <p>settings</p>
         </div>
       </div>
 
 
     </div>
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -77,6 +127,6 @@
           $('#nuke').text($(this).text());
         });
     </script>
-
   </body>
+
 </html>

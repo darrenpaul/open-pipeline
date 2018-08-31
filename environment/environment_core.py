@@ -221,16 +221,9 @@ class Environment:
                 }
                 if hasattr(_appObject, "subProducts"):
                     for sub in getattr(_appObject, "subProducts"):
-                        self.__create_application_config(path=_tempDirectory, app=sub, data=_data)
+                        app_tools.create_application_config(path=_tempDirectory, app=sub, data=_data)
                 else:
-                    self.__create_application_config(path=_tempDirectory, app=app, data=_data)
-
-    def __create_application_config(self, path, app, data):
-        _dataPath = os.path.join(path, app + ".json")
-        data.update({"name": app})
-
-        with open(_dataPath, 'w') as _file:
-            json.dump(data, _file)
+                    app_tools.create_application_config(path=_tempDirectory, app=app, data=_data)
 
 
 def __get_data_from_argv():
@@ -251,36 +244,7 @@ if __name__ == "__main__":
     _data = __get_data_from_argv()
     __prepare_data(data=_data)
 
+
 # envObj = Environment()
 # envObj.launch_application(product="escape", version="16.5.439", sub_product="escape")
 # envObj.launch_application(product="maya", version="2016")
-
-
-
-
-
-
-
-
-
-
-# print "!"*100
-# for i in sys.argv[1:]:
-#     print i
-#     pprint(json.loads(i))
-#     print type(ast.literal_eval(i))
-# print "!"*100
-
-
-
-# pprint(json.loads(sys.argv[3]))
-# pprint(envObj.core_variables)
-# pprint(envObj.configs)
-# envObj.maya.launch(product="maya", version="2016")
-# print "++++++++++++++++++++++++"
-# pprint(envObj.__dict__)
-# pprint(envObj.maya.__dict__)
-
-# pprint(envObj.core_variables)
-# pprint(envObj.configs)
-

@@ -1,6 +1,8 @@
 import os
 import glob
 from modules.manipulation import op_string
+
+
 def set_executable(platform, application_name):
     if platform == "windows":
         application_name = os.path.splitext(application_name)[0]
@@ -54,10 +56,12 @@ def get_app_version_from_path(path):
 
     return _versions
 
+
 def check_if_resolved(string):
     if "{" not in string and "}" not in string:
         return True
     return False
+
 
 def parse_application_environment_config(envs, config, key):
     import platform
@@ -70,3 +74,13 @@ def parse_application_environment_config(envs, config, key):
                     _variables.append(op_string.resolve_string(data=envs, string=i))
                 _config.update({k: _variables})
     return _config
+
+
+def create_application_config(path, app, data):
+    import json
+    # todo create json script to manage reading and writing
+    _dataPath = os.path.join(path, app + ".json")
+    data.update({"name": app})
+
+    with open(_dataPath, 'w') as _file:
+        json.dump(data, _file)

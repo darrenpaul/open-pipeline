@@ -10,7 +10,24 @@ const remote = require('electron').remote;
 // jsonPath = path.join(tempDir, "open_pipeline", ".environment_data.json")
 
 var _applicationConfigPath = path.join(tempDir, "open_pipeline", "applications")
+var opTempDirectory = path.join(tempDir, "open_pipeline")
+var environmentScriptPath = ""
 
+function Get_Environment(dev=false){
+    if(fs.existsSync(opTempDirectory) == false){
+        console.log("Creating temp directory for open pipeline data...")
+        fs.mkdirSync(opTempDirectory)
+    }
+
+    var environmentConfig = fs.readFileSync(path.join(opTempDirectory, ".environment.json"))
+    var environmentConfig = JSON.parse(environmentConfig)
+    environmentScriptPath = environmentConfig.production
+
+    if(dev == true){
+        environmentScriptPath = environmentConfig.dev
+    }
+    Instantiate_Environment()
+}
 
 function Check_Applications(){
     fs.readdir(_applicationConfigPath, function(_error, files){
@@ -26,7 +43,6 @@ function Check_Applications(){
         })
     })
 }
-
 
 // Added the application objects to the html.
 function Add_Application(object){
@@ -94,9 +110,7 @@ function Update_Application_Version(element, value){
 }
 
 function Instantiate_Environment(){
-    _environmentScriptPath = "C:/Users/darrenpaul/development/open-pipeline/environment/environment_core.py"
-
-    PythonShell.run(_environmentScriptPath, function(err, results){
+    PythonShell.run(environmentScriptPath, function(err, results){
         if (err) throw err;
         // results is an array consisting of messages collected during execution
         console.log(results)
@@ -110,7 +124,6 @@ function Launch_Application(application_name, application_version){
 
     data = JSON.stringify({"product": application_name, "version": application_version})
     // Create_Json_Object()
-    _environmentScriptPath = "C:/Users/darrenpaul/development/open-pipeline/environment/environment_core.py"
     
     var options = {
         mode: 'text',
@@ -118,14 +131,14 @@ function Launch_Application(application_name, application_version){
       };
 
 
-    PythonShell.run(_environmentScriptPath, options, function(err, results){
+    PythonShell.run(environmentScriptPath, options, function(err, results){
         if (err) throw err;
         // results is an array consisting of messages collected during execution
         console.log(results);
       })
 }
 
-function Create_Json_Object(){
+function Create_Setting_Config(){
     // jsonPath = path.join(tempDir, "open_pipeline", ".environment_data.json")
     tempDirectory = path.join(tempDir, "open_pipeline")
     if(fs.existsSync(tempDirectory) == false){
@@ -139,4 +152,4 @@ function Create_Json_Object(){
     })
 }
 
-Instantiate_Environment()
+Get_Environment()
